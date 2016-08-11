@@ -1,0 +1,45 @@
+{
+    "name": "WebExtension API samples",
+    "version": "1.0.0",
+    "manifest_version": 2,
+    "description": "WebExtension API samples description",
+    "icons": {
+        "128": "images/icon-128px.png",
+        "48":  "images/icon-48px.png",
+        "32":  "images/icon-32px.png",
+        "16":  "images/icon.png"
+    },
+    "browser_action": {
+        "default_icon":  "images/icon.png",
+        "default_popup": "view/popup.html"
+    },
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ]
+    },
+    "content_scripts": [{
+        "matches": [
+            "*://githube.com/*",
+            "*://localhost/*"
+        ],
+        "js": [
+            "js/inject-specific-sites.js"
+        ]
+    }, {
+        "matches": [
+            "<all_urls>"
+        ],
+        "js": [
+            "js/inject-all-sites.js"
+        ]
+    }],
+    "web_accessible_resources": [
+        "css/inject-css.css",
+        "images/*"
+    ],
+    "permissions": [
+        "<all_urls>",
+        "notifications"
+    ]
+}
