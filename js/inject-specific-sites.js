@@ -3,8 +3,11 @@
 
     if (chrome.runtime && chrome.runtime.sendMessage) {
         chrome.runtime.sendMessage({
-            "from":    "inject-specific-sites.js",
-            "message": "hello world"
-        }, function(response) {});
+            "type": "message",
+            "from": "inject-specific-sites.js",
+            "data": "hello world"
+        }, function(response) {
+            console.log(response);
+        });
     }
 })(document);

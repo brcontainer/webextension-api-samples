@@ -1,11 +1,22 @@
 (function (doc) {
     "use strict";
 
-    if (chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage({
-            "from":    "inject-all-sites.js",
-            "message": "hello world"
-        }, function(response) {});
+    sendSignal({
+        "type": "message",
+        "from": "inject-all-sites.js",
+        "data": "hello world"
+    }, function(response) {
+        console.log(response);
+    });
+
+    function sendSignal(data, callback)
+    {
+        //Older Chrome versions requeries callback function
+        callback = typeof callback === "function" ? callback : function () {};
+
+        if (chrome.runtime && chrome.runtime.sendMessage) {
+            chrome.runtime.sendMessage(data, callback);
+        }
     }
 
     function loadCss(uri)
@@ -26,11 +37,27 @@
     {
         loadCss("/css/inject-css.css");
 
-        var div = doc.createElement("div");
+        var link = doc.createElement("a");
+        var div  = doc.createElement("div");
+
+        link.href = "javascript:void(0);";
+
+        link.onclick = function () {
+            sendSignal({
+                "type": "openinternalpage",
+                "file": "/view/example.html"
+            }, function(response) {
+                console.log(response);
+            });
+        };
+
+        link.textContent = "[Show internal page]";
 
         div.className = "fixed-bar-from-extension";
 
         div.textContent = "Foo Bar Baz - WebExtension sample";
+
+        div.appendChild(link);
 
         doc.body.appendChild(div);
     }
