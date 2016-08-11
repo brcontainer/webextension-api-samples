@@ -10,13 +10,10 @@
         "16":  "images/icon.png"
     },
     "browser_action": {
-        "default_icon":  "images/icon.png",
-        "default_popup": "view/popup.html"
+        "default_icon":  "images/icon.png"
     },
     "background": {
-        "scripts": [
-            "js/background.js"
-        ]
+        "scripts": [ "js/background.js" ]
     },
     "content_scripts": [{
         "matches": [
