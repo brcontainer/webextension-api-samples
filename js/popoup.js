@@ -4,6 +4,9 @@ window.onload = function()
 
     var getBackground = chrome.extension.getBackgroundPage();
 
+    //Remove badge text
+    getBackground.badgeReset();
+
     document.getElementById("message").textContent =
                     "background.js initiate in " + getBackground.backgroundInitiateIn;
 

@@ -3,7 +3,16 @@
 
     var notificationsTotal = 0;
 
+    //Share variable with internal pages, like popup.html
     window.backgroundInitiateIn = new Date().toString();
+    window.badgeReset = function(tab) {
+        notificationsTotal = 0;
+
+        //clear text in browserButton
+        chrome.browserAction.setBadgeText({
+            "text": ""
+        });
+    };
 
     chrome.notifications.onClicked.addListener(function(id, byUser) {
         //Use id for get url
@@ -16,27 +25,6 @@
         }
 
         chrome.notifications.clear(id);
-    });
-
-    /*
-     * WARNING:
-     * chrome.browserAction.onClicked.addListener not work if popup page is defined
-     */
-
-    chrome.browserAction.onClicked.addListener(function(tab) {
-        console.log("Click from #" + tab.id + " tab");
-
-        chrome.browserAction.setPopup({
-            "tabId": tab.id,
-            "popup": "view/popup.html"
-        });
-
-        notificationsTotal = 0;
-
-        //clear text in browserButton
-        chrome.browserAction.setBadgeText({
-            "text": ""
-        });
     });
 
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
