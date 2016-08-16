@@ -1,8 +1,7 @@
-window.onload = function()
-{
+(function(browser) {
     "use strict";
 
-    var getBackground = chrome.extension.getBackgroundPage();
+    var getBackground = browser.extension.getBackgroundPage();
 
     //Remove badge text
     getBackground.badgeReset();
@@ -28,12 +27,12 @@ window.onload = function()
         var id = url;
 
         try {
-            chrome.notifications.create(id, props, function() {});
+            browser.notifications.create(id, props, function() {});
         } catch (ee) {
             //Firefox don't support requireInteraction and causes exception
             delete props.requireInteraction;
 
-            chrome.notifications.create(id, props, function() {});
+            browser.notifications.create(id, props, function() {});
         }
     }
 
@@ -44,4 +43,4 @@ window.onload = function()
     document.getElementById("test2").onclick = function() {
         Notify("Test 2", "Hello world", "https://github.com/brcontainer");
     };
-};
+})(chrome||browser);

@@ -1,4 +1,4 @@
-(function (doc) {
+(function (doc, browser) {
     "use strict";
 
     sendSignal({
@@ -14,8 +14,8 @@
         //Older Chrome versions requeries callback function
         callback = typeof callback === "function" ? callback : function () {};
 
-        if (chrome.runtime && chrome.runtime.sendMessage) {
-            chrome.runtime.sendMessage(data, callback);
+        if (browser.runtime && browser.runtime.sendMessage) {
+            browser.runtime.sendMessage(data, callback);
         }
     }
 
@@ -28,7 +28,7 @@
 
         style.rel  = "stylesheet";
         style.type = "text/css";
-        style.href = chrome.extension.getURL(uri);
+        style.href = browser.extension.getURL(uri);
 
         document.body.appendChild(style);
     }
@@ -68,4 +68,4 @@
         doc.addEventListener("DOMContentLoaded", initiate);
         window.addEventListener("load", initiate);
     }
-})(document);
+})(document, chrome||browser);

@@ -1,4 +1,4 @@
-(function() {
+(function(browser) {
     "use strict";
 
     var notificationsTotal = 0;
@@ -9,27 +9,27 @@
         notificationsTotal = 0;
 
         //clear text in browserButton
-        chrome.browserAction.setBadgeText({
+        browser.browserAction.setBadgeText({
             "text": ""
         });
     };
 
-    chrome.notifications.onClicked.addListener(function(id, byUser) {
+    browser.notifications.onClicked.addListener(function(id, byUser) {
         //Use id for get url
         if (/^(http|https):\/\//.test(id)) {
 
             //Prevent bug in some browsers
             setTimeout(function() {
-                chrome.tabs.create({ "url": id });
+                browser.tabs.create({ "url": id });
             }, 1);
         }
 
-        chrome.notifications.clear(id);
+        browser.notifications.clear(id);
     });
 
     function openInternalPage(file)
     {
-        var internalUrl = chrome.extension.getURL(file);
+        var internalUrl = browser.extension.getURL(file);
 
         /*
          * Firefox don't support query with `moz-extension:` url
@@ -41,7 +41,7 @@
          *   ]
          */
 
-        chrome.tabs.query({}, function(tabs) {
+        browser.tabs.query({}, function(tabs) {
             var tabId;
 
             if (tabs && tabs.length) {
@@ -55,17 +55,17 @@
 
             if (tabId) {
                 //Focuses tab if is open
-                chrome.tabs.update(tabId, { "active": true });
+                browser.tabs.update(tabId, { "active": true });
             } else {
                 //Create new tab
-                chrome.tabs.create({ "url": internalUrl });
+                browser.tabs.create({ "url": internalUrl });
             }
         });
     }
 
     function sendFeedBack(request, sendResponse)
     {
-        chrome.browserAction.setBadgeText({
+        browser.browserAction.setBadgeText({
             "text": String(++notificationsTotal)
         });
 
@@ -74,7 +74,7 @@
         });
     }
 
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         switch (request.type) {
             case "message":
                 sendFeedBack(request, sendResponse);
@@ -85,4 +85,4 @@
             break;
         }
     });
-})();
+})(chrome||browser);

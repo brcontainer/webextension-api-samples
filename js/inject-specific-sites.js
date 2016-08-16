@@ -1,8 +1,8 @@
-(function (doc) {
+(function (doc, browser) {
     "use strict";
 
-    if (chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage({
+    if (browser.runtime && browser.runtime.sendMessage) {
+        browser.runtime.sendMessage({
             "type": "message",
             "from": "inject-specific-sites.js",
             "data": "hello world"
@@ -10,4 +10,4 @@
             console.log(response);
         });
     }
-})(document);
+})(document, chrome||browser);
