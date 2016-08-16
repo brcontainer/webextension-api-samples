@@ -14,9 +14,15 @@
         //Older Chrome versions requeries callback function
         callback = typeof callback === "function" ? callback : function () {};
 
-        if (browser.runtime && browser.runtime.sendMessage) {
-            browser.runtime.sendMessage(data, callback);
-        }
+        setTimeout(function() {
+            if (browser.runtime && browser.runtime.sendMessage) {
+                browser.runtime.sendMessage(data, callback);
+            }
+        }, 1000);
+
+        //Use `return true` if async functions is needed
+
+        return true;
     }
 
     function loadCss(uri)
